@@ -1,0 +1,43 @@
+# Import necessary libraries
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_squared_error
+
+# Load your dataset
+data = pd.read_csv('house_prices.csv')  # Replace 'house_prices.csv' with your dataset file
+
+# Assuming your dataset has columns 'area' and 'price', adapt these to your dataset
+X = data['area'].values.reshape(-1, 1)
+y = data['price'].values
+
+# Split the data into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Create a Linear Regression model
+model = LinearRegression()
+
+# Train the model on the training data
+model.fit(X_train, y_train)
+
+# Make predictions on the test data
+y_pred = model.predict(X_test)
+
+# Calculate the Mean Squared Error to evaluate the model
+mse = mean_squared_error(y_test, y_pred)
+print(f"Mean Squared Error: {mse}")
+
+# Visualize the regression line
+plt.scatter(X_test, y_test, color='blue')
+plt.plot(X_test, y_pred, color='red', linewidth=2)
+plt.xlabel('Area')
+plt.ylabel('Price')
+plt.title('House Price Prediction')
+plt.show()
+
+# Predict the price of a new house with a given area
+new_area = 1500  # Replace with the area of the house you want to predict
+predicted_price = model.predict(np.array([[new_area]]))
+print(f"Predicted Price for {new_area} sq. ft. area: {predicted_price[0]}")
